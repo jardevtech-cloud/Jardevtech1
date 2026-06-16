@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JardevTech — Website Development & Software Engineering Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --orange: #f97316;
+    --amber: #fbbf24;
+    --blue-glow: #3b82f6;
+    --bg-deep: #050810;
+    --bg-card: #0d1117;
+    --bg-panel: #111827;
+    --border-dim: #1e293b;
+    --border-glow: #f97316;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-deep);
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+  .font-display { font-family: 'Space Grotesk', sans-serif; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Ambient background */
+  .bg-ambient {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(59,130,246,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(249,115,22,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(15,20,40,0.95) 0%, transparent 100%);
+  }
+  .noise {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* Grid lines */
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #050810; }
+  ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 2px; }
+
+  /* Glow effects */
+  .glow-orange { box-shadow: 0 0 30px rgba(249,115,22,0.15), 0 0 60px rgba(249,115,22,0.05); }
+  .glow-blue   { box-shadow: 0 0 30px rgba(59,130,246,0.15), 0 0 60px rgba(59,130,246,0.05); }
+  .text-glow-orange { text-shadow: 0 0 20px rgba(249,115,22,0.6); }
+  .text-glow-blue   { text-shadow: 0 0 20px rgba(59,130,246,0.6); }
+
+  /* Cards */
+  .card {
+    background: rgba(13,17,23,0.85);
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .card:hover { border-color: rgba(249,115,22,0.3); box-shadow: 0 0 30px rgba(249,115,22,0.08); }
+
+  /* Buttons */
+  .btn-primary {
+    background: linear-gradient(135deg, #f97316, #fb923c);
+    color: #000; font-weight: 700;
+    padding: 12px 28px; border-radius: 10px;
+    transition: all 0.2s; border: none; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(249,115,22,0.4); }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid rgba(249,115,22,0.5);
+    color: #f97316; font-weight: 600;
+    padding: 11px 27px; border-radius: 10px;
+    transition: all 0.2s; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .btn-outline:hover { background: rgba(249,115,22,0.1); border-color: #f97316; }
+
+  /* Badge */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 500; letter-spacing: 0.05em;
+  }
+  .badge-orange { background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); color: #fb923c; }
+  .badge-blue   { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); color: #60a5fa; }
+  .badge-green  { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.3);  color: #4ade80; }
+  .badge-purple { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; }
+
+  /* Pulse dot */
+  .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #22c55e; display: inline-block;
+    animation: pulse-green 2s infinite;
+  }
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  }
+
+  /* Header nav */
+  #main-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(5,8,16,0.85);
+    border-bottom: 1px solid #1e293b;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s;
+  }
+
+  /* Hero gradient text */
+  .grad-blue { background: linear-gradient(135deg, #60a5fa, #3b82f6, #1d4ed8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .grad-orange { background: linear-gradient(135deg, #f97316, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* Slider styling */
+  input[type=range] {
+    -webkit-appearance: none; width: 100%; height: 4px;
+    background: linear-gradient(to right, #f97316 var(--val, 50%), #1e293b var(--val, 50%));
+    border-radius: 2px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px;
+    background: #f97316; border-radius: 50%; cursor: pointer;
+    border: 2px solid #000; box-shadow: 0 0 10px rgba(249,115,22,0.5);
+  }
+
+  /* Chat terminal */
+  .chat-terminal {
+    background: #020408;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Typing cursor */
+  .typing-cursor::after {
+    content: '▋';
+    animation: blink 1s step-end infinite;
+    color: #f97316;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* Animations */
+  @keyframes fadeInUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+  @keyframes slideInRight { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes float { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-10px); } }
+  @keyframes rotate-slow { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+  @keyframes scanline { 0% { top:-10%; } 100% { top:110%; } }
+
+  .anim-fade-up { animation: fadeInUp 0.7s ease both; }
+  .anim-fade    { animation: fadeIn 0.6s ease both; }
+  .anim-float   { animation: float 4s ease-in-out infinite; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+
+  /* Section divider */
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: #f97316;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-eyebrow::before {
+    content: ''; display: block; width: 24px; height: 1px; background: #f97316;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(5,8,16,0.9);
+    backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  .modal-box {
+    background: #0d1117;
+    border: 1px solid #1e293b;
+    border-radius: 20px;
+    width: 100%; max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  /* Tab */
+  .tab-btn {
+    padding: 8px 20px; border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px;
+    cursor: pointer; transition: all 0.2s; border: none;
+    background: transparent; color: #64748b;
+  }
+  .tab-btn.active { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeInUp 0.3s ease; }
+
+  /* Admin input */
+  .admin-input {
+    background: rgba(5,8,16,0.8);
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    width: 100%; outline: none;
+    transition: border-color 0.2s;
+  }
+  .admin-input:focus { border-color: rgba(249,115,22,0.5); }
+  .admin-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: #64748b; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 4px; display: block;
+  }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: rgba(249,115,22,0.5);
+    background: rgba(249,115,22,0.03);
+  }
+  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  /* Project card */
+  .project-card {
+    background: rgba(5,8,16,0.7);
+    border: 1px solid #1e293b;
+    border-radius: 12px; padding: 16px;
+    transition: all 0.2s;
+  }
+  .project-card:hover { border-color: rgba(249,115,22,0.2); }
+
+  /* Scrollbar in modal */
+  .modal-box::-webkit-scrollbar { width: 4px; }
+  .modal-box::-webkit-scrollbar-thumb { background: #f97316; }
+
+  /* Hero illustration */
+  .hero-illustration {
+    position: relative;
+    background: linear-gradient(135deg, rgba(59,130,246,0.05), rgba(249,115,22,0.05));
+    border: 1px solid #1e293b;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .hero-illustration .scan {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(249,115,22,0.4), transparent);
+    animation: scanline 3s linear infinite;
+  }
+
+  /* Skill bar */
+  .skill-bar-fill {
+    height: 4px; border-radius: 2px;
+    background: linear-gradient(90deg, #3b82f6, #f97316);
+    transition: width 1s ease;
+  }
+
+  /* Orbit decoration */
+  .orbit-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(249,115,22,0.1);
+    animation: rotate-slow 20s linear infinite;
+  }
+
+  /* Mobile nav */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: block; animation: fadeInUp 0.2s ease; }
+
+  /* Footer */
+  footer { border-top: 1px solid #1e293b; }
+
+  /* Transition for nav scroll */
+  #main-header.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+
+  /* Active nav link */
+  .nav-link {
+    color: #94a3b8; font-size: 14px; font-weight: 500;
+    transition: color 0.2s; padding: 4px 0;
+    text-decoration: none; position: relative;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 1px; background: #f97316; transform: scaleX(0); transition: transform 0.2s;
+  }
+  .nav-link:hover { color: #f97316; }
+  .nav-link:hover::after { transform: scaleX(1); }
+
+  /* Number counter */
+  .counter-val { font-family: 'JetBrains Mono', monospace; }
+
+  /* Tooltip */
+  .tooltip { position: relative; }
+  .tooltip .tip {
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #1e293b; color: #e2e8f0; font-size: 11px;
+    padding: 4px 10px; border-radius: 6px; white-space: nowrap;
+    pointer-events: none; opacity: 0; transition: opacity 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tooltip:hover .tip { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-ambient"></div>
+<div class="noise"></div>
+<div class="grid-lines"></div>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header id="main-header">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo + Brand -->
+      <div class="flex items-center gap-3">
+        <div id="header-logo-wrap" class="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 border border-slate-800">
+          <img id="header-logo-img" src="" alt="JardevTech Logo"
+            style="width:100%;height:100%;object-fit:cover;display:none;"/>
+          <div id="header-logo-svg" class="w-full h-full flex items-center justify-center"
+            style="background:linear-gradient(135deg,#1e3a5f,#0f172a);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <polyline points="16 18 22 12 16 6" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="8 6 2 12 8 18" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="font-display font-bold text-lg leading-none tracking-tight">
+            JARDEV<span class="text-orange-400">TECH</span>
+          </div>
+          <div class="font-mono text-xs text-slate-500 leading-none mt-0.5">&lt;We Build. You Grow.&gt;</div>
+        </div>
+      </div>
+
+      <!-- Nav links (desktop) -->
+      <nav class="hidden md:flex items-center gap-7">
+        <a href="#hero"      class="nav-link">Studio</a>
+        <a href="#services"  class="nav-link">Services</a>
+        <a href="#projects"  class="nav-link">Projects</a>
+        <a href="#estimate"  class="nav-link">Estimate</a>
+        <a href="#ai-consult" class="nav-link">AI Consult</a>
+        <a href="#contact"   class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-3">
+        <!-- UTC Clock -->
+        <div class="hidden sm:flex items-center gap-2 font-mono text-xs text-slate-400 badge badge-blue">
+          <span class="pulse-dot" style="width:6px;height:6px;"></span>
+          <span id="utc-clock">00:00:00</span>
+          <span>UTC</span>
+        </div>
+        <!-- Admin lock -->
+        <button onclick="openAdminModal()" class="tooltip w-9 h-9 flex items-center justify-center rounded-lg border border-slate-800 bg-slate-900 hover:border-orange-500 hover:bg-orange-500/10 transition-all">
+          <i data-lucide="lock" class="text-orange-400" style="width:16px;height:16px;"></i>
+          <span class="tip">Admin Console</span>
+        </button>
+        <!-- Mobile menu -->
+        <button onclick="toggleMobileMenu()" class="md:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-slate-800">
+          <i data-lucide="menu" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden border-t border-slate-900 bg-slate-950/95">
+    <nav class="flex flex-col gap-1 px-4 py-3">
+      <a href="#hero" onclick="toggleMobileMenu()" class="nav-link py-2">Studio</a>
+      <a href="#services" onclick="toggleMobileMenu()" class="nav-link py-2">Services</a>
+      <a href="#projects" onclick="toggleMobileMenu()" class="nav-link py-2">Projects</a>
+      <a href="#estimate" onclick="toggleMobileMenu()" class="nav-link py-2">Estimate</a>
+      <a href="#ai-consult" onclick="toggleMobileMenu()" class="nav-link py-2">AI Consult</a>
+      <a href="#contact" onclick="toggleMobileMenu()" class="nav-link py-2">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     HERO SECTION
+═══════════════════════════════════════════════ -->
+<section id="hero" class="relative z-10 pt-32 pb-20 px-4 sm:px-6 max-w-7xl mx-auto">
+  <div class="grid lg:grid-cols-2 gap-16 items-center">
+    <!-- Left: Text content -->
+    <div class="anim-fade-up">
+      <!-- Status badge -->
+      <div class="flex items-center gap-2 mb-6">
+        <span class="badge badge-green"><span class="pulse-dot"></span><span id="hero-badge-text">Available for Projects · Q3 2025</span></span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-display font-extrabold leading-[1.05] mb-5">
+        <span class="text-4xl sm:text-5xl lg:text-6xl block">We engineer</span>
+        <span class="text-5xl sm:text-6xl lg:text-7xl block">
+          <span class="grad-blue">Jar</span><span class="grad-orange">devTech</span>
+        </span>
+        <span class="text-4xl sm:text-5xl lg:text-6xl block text-slate-300">solutions.</span>
+      </h1>
+
+      <p id="hero-subheading" class="text-slate-400 text-lg leading-relaxed mb-4 max-w-lg">
+        Full-stack web engineering and software studio. We build scalable, performant digital products that grow your business from the ground up.
+      </p>
+      <p id="hero-desc" class="text-slate-500 text-sm leading-relaxed mb-8 max-w-lg">
+        From rapid MVP launches to enterprise-grade platforms — JardevTech delivers pixel-perfect design fused with engineering discipline. Every line of code ships with purpose.
+      </p>
+
+      <div class="flex flex-wrap gap-3">
+        <button class="btn-primary" onclick="document.getElementById('estimate').scrollIntoView({behavior:'smooth'})">
+          Get an Estimate →
+        </button>
+        <button class="btn-outline" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+          View Projects
+        </button>
+      </div>
+
+      <!-- Metrics strip -->
+      <div class="flex flex-wrap gap-6 mt-10 pt-8 border-t border-slate-900">
+        <div>
+          <div class="font-display font-bold text-2xl text-white counter-val" id="met-projects">30+</div>
+          <div class="font-mono text-xs text-slate-500 mt-0.5">Projects Shipped</div>
+        </div>
+        <div class="w-px bg-slate-800"></div>
+        <div>
+          <div class="font-display font-bold text-2xl text-white counter-val" id="met-clients">20+</div>
+          <div class="font-mono text-xs text-slate-500 mt-0.5">Happy Clients</div>
+        </div>
+        <div class="w-px bg-slate-800"></div>
+        <div>
+          <div class="font-display font-bold text-2xl text-white counter-val" id="met-uptime">99.9%</div>
+          <div class="font-mono text-xs text-slate-500 mt-0.5">Uptime Record</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Illustration + Founder card -->
+    <div class="space-y-5 anim-fade-up delay-3">
+      <!-- Hero badge illustration -->
+      <div class="hero-illustration h-72 flex items-center justify-center relative overflow-hidden">
+        <div class="scan"></div>
+        <!-- Orbit rings -->
+        <div class="orbit-ring" style="width:180px;height:180px;top:50%;left:50%;margin:-90px 0 0 -90px;"></div>
+        <div class="orbit-ring" style="width:260px;height:260px;top:50%;left:50%;margin:-130px 0 0 -130px;animation-direction:reverse;animation-duration:30s;"></div>
+
+        <!-- Default SVG illustration -->
+        <div id="hero-badge-default" class="relative z-10 text-center">
+          <div class="anim-float" style="animation-duration:3s;">
+            <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="55" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="60" cy="60" r="40" stroke="#f97316" stroke-width="1" stroke-dasharray="4 4"/>
+              <rect x="38" y="48" width="44" height="28" rx="4" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
+              <rect x="44" y="54" width="10" height="3" rx="1.5" fill="#f97316"/>
+              <rect x="44" y="60" width="20" height="2" rx="1" fill="#3b82f6" opacity="0.6"/>
+              <rect x="44" y="65" width="14" height="2" rx="1" fill="#3b82f6" opacity="0.3"/>
+              <circle cx="72" cy="55" r="6" fill="#f97316" fill-opacity="0.15" stroke="#f97316" stroke-width="1"/>
+              <polyline points="69 55 71 57 75 53" stroke="#f97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="60" cy="92" r="3" fill="#f97316"/>
+              <line x1="60" y1="76" x2="60" y2="89" stroke="#f97316" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="font-mono text-xs text-orange-400 mt-2">// JardevTech Studio</div>
+        </div>
+
+        <!-- Hero uploaded image (hidden by default) -->
+        <img id="hero-badge-img" src="" alt="Hero Badge" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"/>
+
+        <!-- Corner labels -->
+        <div class="absolute top-3 left-3 font-mono text-xs text-slate-600">sys.viz.01</div>
+        <div class="absolute bottom-3 right-3 font-mono text-xs text-slate-600">v2.0.25</div>
+      </div>
+
+      <!-- Founder card -->
+      <div class="card p-5">
+        <div class="flex items-start gap-4">
+          <!-- Avatar -->
+          <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-slate-800 relative">
+            <img id="founder-img" src="" alt="Jarsila Paul"
+              style="width:100%;height:100%;object-fit:cover;display:none;"/>
+            <div id="founder-avatar-default" class="w-full h-full flex items-center justify-center font-display font-bold text-xl"
+              style="background:linear-gradient(135deg,#1e3a5f,#1e293b);color:#60a5fa;">JP</div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-display font-bold text-white" id="founder-name">Jarsila Paul</span>
+              <span class="badge badge-orange">Founder</span>
+            </div>
+            <div class="font-mono text-xs text-slate-400 mt-0.5" id="founder-title">Lead Engineer & Studio Director</div>
+
+            <!-- Contact pills -->
+            <div class="flex gap-2 mt-3 flex-wrap">
+              <a id="wa-link" href="https://wa.me/" target="_blank"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#4ade80;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span id="wa-label">WhatsApp</span>
+              </a>
+              <a id="phone-link" href="tel:+"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">
+                <i data-lucide="phone" style="width:12px;height:12px;"></i>
+                <span id="phone-label">Call Studio</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skill metrics -->
+        <div class="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-900">
+          <div class="text-center">
+            <div class="font-mono text-lg font-bold text-orange-400" id="skill-1-val">98%</div>
+            <div class="font-mono text-xs text-slate-500 mt-0.5 leading-tight" id="skill-1-label">Client Satisfaction</div>
+            <div class="mt-1.5 bg-slate-900 rounded-full h-1 overflow-hidden"><div class="skill-bar-fill" id="skill-1-bar" style="width:98%"></div></div>
+          </div>
+          <div class="text-center">
+            <div class="font-mono text-lg font-bold text-blue-400" id="skill-2-val">5yr</div>
+            <div class="font-mono text-xs text-slate-500 mt-0.5 leading-tight" id="skill-2-label">Experience</div>
+            <div class="mt-1.5 bg-slate-900 rounded-full h-1 overflow-hidden"><div class="skill-bar-fill" id="skill-2-bar" style="width:80%"></div></div>
+          </div>
+          <div class="text-center">
+            <div class="font-mono text-lg font-bold text-purple-400" id="skill-3-val">40+</div>
+            <div class="font-mono text-xs text-slate-500 mt-0.5 leading-tight" id="skill-3-label">Tech Stack Items</div>
+            <div class="mt-1.5 bg-slate-900 rounded-full h-1 overflow-hidden"><div class="skill-bar-fill" id="skill-3-bar" style="width:90%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SERVICES SECTION
+═══════════════════════════════════════════════ -->
+<section id="services" class="relative z-10 py-20 px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="section-eyebrow justify-center mb-3"><span>what we do</span></div>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-white mb-3">Engineering Services</h2>
+      <p class="text-slate-400 max-w-xl mx-auto text-sm">End-to-end digital product development. From architecture to deployment, JardevTech handles the full stack.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Service cards -->
+      <div class="card p-6 group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);">
+          <i data-lucide="globe" style="width:22px;height:22px;color:#60a5fa;"></i>
+        </div>
+        <h3 class="font-display font-bold text-white mb-2">Web Development</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Custom websites and web apps built with modern frameworks. Responsive, fast, and SEO-optimized from the ground up.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="badge badge-blue" style="font-size:10px;">React</span>
+          <span class="badge badge-blue" style="font-size:10px;">Next.js</span>
+          <span class="badge badge-blue" style="font-size:10px;">Vue</span>
+        </div>
+      </div>
+
+      <div class="card p-6 group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);">
+          <i data-lucide="server" style="width:22px;height:22px;color:#f97316;"></i>
+        </div>
+        <h3 class="font-display font-bold text-white mb-2">Backend Engineering</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Scalable APIs, microservices, and database architecture. Built to handle millions of requests with sub-100ms latency.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="badge badge-orange" style="font-size:10px;">Node.js</span>
+          <span class="badge badge-orange" style="font-size:10px;">Python</span>
+          <span class="badge badge-orange" style="font-size:10px;">PostgreSQL</span>
+        </div>
+      </div>
+
+      <div class="card p-6 group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);">
+          <i data-lucide="smartphone" style="width:22px;height:22px;color:#c084fc;"></i>
+        </div>
+        <h3 class="font-display font-bold text-white mb-2">Mobile Apps</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Cross-platform mobile apps with native performance. iOS and Android from a single codebase — fast delivery, zero compromise.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="badge badge-purple" style="font-size:10px;">React Native</span>
+          <span class="badge badge-purple" style="font-size:10px;">Flutter</span>
+        </div>
+      </div>
+
+      <div class="card p-6 group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);">
+          <i data-lucide="cloud" style="width:22px;height:22px;color:#4ade80;"></i>
+        </div>
+        <h3 class="font-display font-bold text-white mb-2">Cloud & DevOps</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">CI/CD pipelines, containerization, and cloud infrastructure. Automated deployments with zero-downtime rollouts.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="badge badge-green" style="font-size:10px;">AWS</span>
+          <span class="badge badge-green" style="font-size:10px;">Docker</span>
+          <span class="badge badge-green" style="font-size:10px;">Vercel</span>
+        </div>
+      </div>
+
+      <div class="card p-6 group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);">
+          <i data-lucide="layout-dashboard" style="width:22px;height:22px;color:#fbbf24;"></i>
+        </div>
+        <h3 class="font-display font-bold text-white mb-2">UI/UX Design</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Interface design that converts. Figma prototypes, design systems, and pixel-perfect implementation baked into every project.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="badge badge-orange" style="font-size:10px;">Figma</span>
+          <span class="badge badge-orange" style="font-size:10px;">Prototyping</span>
+        </div>
+      </div>
+
+      <div class="card p-6 group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);">
+          <i data-lucide="bot" style="width:22px;height:22px;color:#60a5fa;"></i>
+        </div>
+        <h3 class="font-display font-bold text-white mb-2">AI Integration</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Embed intelligence into your product. LLM-powered features, automation pipelines, and AI-first product design.</p>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          <span class="badge badge-blue" style="font-size:10px;">OpenAI</span>
+          <span class="badge badge-blue" style="font-size:10px;">LangChain</span>
+          <span class="badge badge-blue" style="font-size:10px;">RAG</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     PROJECTS SECTION
+═══════════════════════════════════════════════ -->
+<section id="projects" class="relative z-10 py-20 px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <div class="section-eyebrow mb-3"><span>portfolio</span></div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl text-white">Systems Blueprint</h2>
+        <p class="text-slate-400 text-sm mt-2 max-w-md">A record of digital systems engineered with precision and shipped with purpose.</p>
+      </div>
+    </div>
+
+    <div id="projects-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Dynamically rendered by JS -->
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="#contact" class="btn-outline inline-block">Start Your Project →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     ESTIMATE CALCULATOR
+═══════════════════════════════════════════════ -->
+<section id="estimate" class="relative z-10 py-20 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="section-eyebrow justify-center mb-3"><span>pricing calculator</span></div>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-white mb-3">Project Estimate</h2>
+      <p class="text-slate-400 text-sm max-w-md mx-auto">Configure your project parameters and get an instant estimate. No hidden fees — transparent pricing from the start.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Left: Controls -->
+      <div class="card p-6 space-y-6">
+        <div>
+          <label class="admin-label">Project Type</label>
+          <div class="grid grid-cols-2 gap-2 mt-2">
+            <button onclick="setProjectType('website')" id="type-website"
+              class="py-2 px-3 rounded-lg text-xs font-semibold border transition-all type-btn active-type"
+              style="background:rgba(249,115,22,0.15);border-color:rgba(249,115,22,0.4);color:#f97316;">
+              Website
+            </button>
+            <button onclick="setProjectType('webapp')" id="type-webapp"
+              class="py-2 px-3 rounded-lg text-xs font-semibold border transition-all type-btn"
+              style="background:transparent;border-color:#1e293b;color:#64748b;">
+              Web App
+            </button>
+            <button onclick="setProjectType('mobile')" id="type-mobile"
+              class="py-2 px-3 rounded-lg text-xs font-semibold border transition-all type-btn"
+              style="background:transparent;border-color:#1e293b;color:#64748b;">
+              Mobile App
+            </button>
+            <button onclick="setProjectType('fullstack')" id="type-fullstack"
+              class="py-2 px-3 rounded-lg text-xs font-semibold border transition-all type-btn"
+              style="background:transparent;border-color:#1e293b;color:#64748b;">
+              Full-Stack System
+            </button>
+          </div>
+        </div>
+
+        <!-- Pages slider -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="admin-label">Number of Pages / Screens</label>
+            <span class="font-mono text-orange-400 text-sm" id="pages-val">5</span>
+          </div>
+          <input type="range" id="pages-slider" min="1" max="30" value="5" oninput="updateEstimate()"/>
+        </div>
+
+        <!-- Timeline slider -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label class="admin-label">Timeline (weeks)</label>
+            <span class="font-mono text-orange-400 text-sm" id="timeline-val">4</span>
+          </div>
+          <input type="range" id="timeline-slider" min="1" max="24" value="4" oninput="updateEstimate()"/>
+        </div>
+
+        <!-- Add-ons -->
+        <div>
+          <label class="admin-label mb-2">Add-ons</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="addon-auth" class="w-4 h-4 accent-orange-500" onchange="updateEstimate()"/>
+              <span class="text-sm text-slate-300">Authentication & User Accounts</span>
+              <span class="ml-auto font-mono text-xs text-orange-400">+$400</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="addon-api" class="w-4 h-4 accent-orange-500" onchange="updateEstimate()"/>
+              <span class="text-sm text-slate-300">REST API / Third-party Integrations</span>
+              <span class="ml-auto font-mono text-xs text-orange-400">+$600</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="addon-cms" class="w-4 h-4 accent-orange-500" onchange="updateEstimate()"/>
+              <span class="text-sm text-slate-300">CMS / Admin Dashboard</span>
+              <span class="ml-auto font-mono text-xs text-orange-400">+$500</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="addon-ai" class="w-4 h-4 accent-orange-500" onchange="updateEstimate()"/>
+              <span class="text-sm text-slate-300">AI / LLM Feature Integration</span>
+              <span class="ml-auto font-mono text-xs text-orange-400">+$800</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="addon-seo" class="w-4 h-4 accent-orange-500" onchange="updateEstimate()"/>
+              <span class="text-sm text-slate-300">SEO Optimization Package</span>
+              <span class="ml-auto font-mono text-xs text-orange-400">+$250</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="addon-hosting" class="w-4 h-4 accent-orange-500" onchange="updateEstimate()"/>
+              <span class="text-sm text-slate-300">Hosting & Domain Setup</span>
+              <span class="ml-auto font-mono text-xs text-orange-400">+$150</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Estimate output -->
+      <div class="space-y-4">
+        <!-- Fixed cost -->
+        <div class="card p-6 glow-orange">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="font-mono text-xs text-slate-500 uppercase tracking-widest mb-1">One-Time Build</div>
+              <div class="font-display font-bold text-4xl text-white">$<span id="est-fixed">1,200</span></div>
+            </div>
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);">
+              <i data-lucide="zap" style="width:24px;height:24px;color:#f97316;"></i>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between text-slate-400">
+              <span>Base build cost</span>
+              <span class="font-mono" id="est-base">$800</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Per-page rate</span>
+              <span class="font-mono" id="est-perpage">$80</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Add-ons</span>
+              <span class="font-mono" id="est-addons">$0</span>
+            </div>
+            <div class="border-t border-slate-800 pt-2 flex justify-between text-white font-semibold">
+              <span>Total Fixed</span>
+              <span class="font-mono text-orange-400">$<span id="est-fixed2">1,200</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly retainer -->
+        <div class="card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="font-mono text-xs text-slate-500 uppercase tracking-widest mb-1">Monthly Retainer</div>
+              <div class="font-display font-bold text-3xl text-white">$<span id="est-monthly">300</span><span class="text-lg text-slate-500">/mo</span></div>
+            </div>
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);">
+              <i data-lucide="refresh-cw" style="width:24px;height:24px;color:#60a5fa;"></i>
+            </div>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">Includes ongoing maintenance, updates, hosting management, priority support, and monthly performance reports.</p>
+        </div>
+
+        <!-- Speed metric -->
+        <div class="card p-4 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);">
+            <i data-lucide="trending-up" style="width:18px;height:18px;color:#4ade80;"></i>
+          </div>
+          <div>
+            <div class="font-display font-semibold text-white text-sm">Estimated Performance Gain</div>
+            <div class="font-mono text-xs text-slate-400 mt-0.5">Your site will load <span id="est-speed" class="text-green-400 font-bold">2.4×</span> faster than average competitors.</div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+          class="btn-primary w-full text-center">
+          Request Detailed Proposal →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     AI CONSULTANT SIMULATOR
+═══════════════════════════════════════════════ -->
+<section id="ai-consult" class="relative z-10 py-20 px-4 sm:px-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <div class="section-eyebrow justify-center mb-3"><span>ai consultant</span></div>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-white mb-3">JardevTech AI Terminal</h2>
+      <p class="text-slate-400 text-sm max-w-md mx-auto">Ask our AI consultant anything about your project needs. Select a mode and fire away.</p>
+    </div>
+
+    <div class="chat-terminal overflow-hidden">
+      <!-- Terminal header -->
+      <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-900">
+        <div class="w-3 h-3 rounded-full" style="background:#ff5f57;"></div>
+        <div class="w-3 h-3 rounded-full" style="background:#febc2e;"></div>
+        <div class="w-3 h-3 rounded-full" style="background:#28c840;"></div>
+        <span class="ml-3 font-mono text-xs text-slate-500">jardevtech-ai-console — bash</span>
+        <div class="ml-auto badge badge-green" style="font-size:10px;"><span class="pulse-dot" style="width:5px;height:5px;"></span>ONLINE</div>
+      </div>
+
+      <!-- Mode selector -->
+      <div class="flex gap-2 p-4 border-b border-slate-900 flex-wrap">
+        <span class="font-mono text-xs text-slate-500 self-center">MODE:</span>
+        <button onclick="setConsultMode('tech')" id="mode-tech" class="badge badge-orange cursor-pointer mode-btn">⚡ Tech Strategy</button>
+        <button onclick="setConsultMode('design')" id="mode-design" class="badge badge-blue cursor-pointer mode-btn" style="background:transparent;border-color:#1e293b;color:#475569;">🎨 UI/UX Design</button>
+        <button onclick="setConsultMode('cost')" id="mode-cost" class="badge badge-green cursor-pointer mode-btn" style="background:transparent;border-color:#1e293b;color:#475569;">💰 Cost Planning</button>
+        <button onclick="setConsultMode('scale')" id="mode-scale" class="badge badge-purple cursor-pointer mode-btn" style="background:transparent;border-color:#1e293b;color:#475569;">📈 Growth & Scale</button>
+      </div>
+
+      <!-- Chat output -->
+      <div id="chat-output" class="p-4 h-72 overflow-y-auto space-y-3 text-sm">
+        <div class="font-mono text-xs text-slate-600">// JardevTech AI Console v2.0 — initialized</div>
+        <div class="font-mono text-xs text-slate-600">// Select a consulting mode above, then type your question.</div>
+        <div class="text-green-400 font-mono text-xs mt-3">jardevtech@ai:~$ <span class="typing-cursor"></span></div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="border-t border-slate-900 p-4 flex gap-3">
+        <span class="font-mono text-orange-400 text-sm self-center flex-shrink-0">›</span>
+        <input type="text" id="chat-input" placeholder="Ask anything about your project..."
+          class="flex-1 bg-transparent font-mono text-sm text-slate-300 outline-none placeholder-slate-700"
+          onkeydown="if(event.key==='Enter') sendConsultMessage()"/>
+        <button onclick="sendConsultMessage()"
+          class="w-8 h-8 flex items-center justify-center rounded-lg bg-orange-500 hover:bg-orange-400 transition-colors flex-shrink-0">
+          <i data-lucide="send" style="width:14px;height:14px;color:#000;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick prompts -->
+    <div class="flex flex-wrap gap-2 mt-4">
+      <span class="font-mono text-xs text-slate-600">Quick asks:</span>
+      <button onclick="quickPrompt('What tech stack should I use for my e-commerce site?')" class="text-xs px-3 py-1 rounded-full border border-slate-800 text-slate-400 hover:border-orange-500 hover:text-orange-400 transition-all font-mono">Tech stack for e-commerce?</button>
+      <button onclick="quickPrompt('How much should I budget for a startup MVP?')" class="text-xs px-3 py-1 rounded-full border border-slate-800 text-slate-400 hover:border-orange-500 hover:text-orange-400 transition-all font-mono">MVP budget guide?</button>
+      <button onclick="quickPrompt('How can I make my website faster?')" class="text-xs px-3 py-1 rounded-full border border-slate-800 text-slate-400 hover:border-orange-500 hover:text-orange-400 transition-all font-mono">Speed optimization tips?</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CONTACT SECTION
+═══════════════════════════════════════════════ -->
+<section id="contact" class="relative z-10 py-20 px-4 sm:px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-10">
+      <div class="section-eyebrow justify-center mb-3"><span>get in touch</span></div>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-white mb-3">Start Your Project</h2>
+      <p class="text-slate-400 text-sm max-w-md mx-auto">Ready to build something extraordinary? Fill in the brief and we'll respond within 24 hours with a detailed proposal.</p>
+    </div>
+
+    <div class="card p-6 sm:p-8">
+      <div class="grid sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="admin-label">Full Name</label>
+          <input type="text" placeholder="Your name" class="admin-input mt-1"/>
+        </div>
+        <div>
+          <label class="admin-label">Email</label>
+          <input type="email" placeholder="you@company.com" class="admin-input mt-1"/>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="admin-label">Project Type</label>
+        <select class="admin-input mt-1" style="appearance:none;">
+          <option value="" style="background:#0d1117;">Select project type...</option>
+          <option style="background:#0d1117;">Website / Landing Page</option>
+          <option style="background:#0d1117;">Web Application</option>
+          <option style="background:#0d1117;">Mobile App</option>
+          <option style="background:#0d1117;">Full-Stack System</option>
+          <option style="background:#0d1117;">Consulting</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="admin-label">Budget Range</label>
+        <select class="admin-input mt-1" style="appearance:none;">
+          <option style="background:#0d1117;">$500 – $1,500</option>
+          <option style="background:#0d1117;">$1,500 – $5,000</option>
+          <option style="background:#0d1117;">$5,000 – $15,000</option>
+          <option style="background:#0d1117;">$15,000+</option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label class="admin-label">Project Brief</label>
+        <textarea rows="4" placeholder="Describe your project, goals, and timeline..." class="admin-input mt-1" style="resize:vertical;"></textarea>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button class="btn-primary flex-1 sm:flex-none" onclick="handleContactSubmit()">Send Brief →</button>
+        <a id="contact-wa" href="https://wa.me/" target="_blank"
+          class="btn-outline flex items-center justify-center gap-2 flex-1 sm:flex-none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+      <div id="contact-success" class="hidden mt-4 p-3 rounded-lg text-center font-mono text-sm text-green-400" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);">
+        ✓ Message queued. We'll respond within 24 hours.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+<footer class="relative z-10 py-10 px-4 sm:px-6 mt-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <div class="font-display font-bold text-lg">JARDEV<span class="text-orange-400">TECH</span></div>
+        <div class="font-mono text-xs text-slate-600 mt-0.5">© 2025 JardevTech Studio. All rights reserved.</div>
+      </div>
+      <div class="flex items-center gap-2 font-mono text-xs text-slate-600">
+        <span class="pulse-dot" style="width:6px;height:6px;"></span>
+        All systems operational · <span id="footer-utc"></span> UTC
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════
+     ADMIN CONSOLE MODAL
+═══════════════════════════════════════════════ -->
+<div id="admin-modal" class="modal-overlay" onclick="handleModalBgClick(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-5 border-b border-slate-900">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);">
+          <i data-lucide="terminal" style="width:16px;height:16px;color:#f97316;"></i>
+        </div>
+        <div>
+          <div class="font-display font-bold text-white text-sm">Systems Console</div>
+          <div class="font-mono text-xs text-slate-500">JardevTech Admin CMS · Secure Access</div>
+        </div>
+      </div>
+      <button onclick="closeAdminModal()" class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-800 hover:border-red-500 hover:bg-red-500/10 transition-all">
+        <i data-lucide="x" style="width:14px;height:14px;color:#64748b;"></i>
+      </button>
+    </div>
+
+    <!-- Login gate -->
+    <div id="admin-login" class="p-8 text-center">
+      <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);">
+        <i data-lucide="lock" style="width:28px;height:28px;color:#f97316;"></i>
+      </div>
+      <h3 class="font-display font-bold text-white text-xl mb-1">Operator Authorization</h3>
+      <p class="font-mono text-xs text-slate-500 mb-6">Enter credentials to access the Systems Console</p>
+      <div class="max-w-sm mx-auto space-y-3">
+        <input type="text" id="admin-user" placeholder="Username" class="admin-input" autocomplete="off"/>
+        <input type="password" id="admin-pass" placeholder="Password" class="admin-input"
+          onkeydown="if(event.key==='Enter') attemptAdminLogin()"/>
+        <div id="admin-err" class="hidden font-mono text-xs text-red-400 py-2 px-3 rounded-lg" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);">
+          ✗ Invalid credentials. Access denied.
+        </div>
+        <button onclick="attemptAdminLogin()" class="btn-primary w-full mt-2">Authenticate →</button>
+      </div>
+    </div>
+
+    <!-- Dashboard (hidden until login) -->
+    <div id="admin-dashboard" class="hidden">
+      <!-- Tabs -->
+      <div class="flex items-center gap-2 p-4 border-b border-slate-900">
+        <button class="tab-btn active" onclick="switchAdminTab('cms')">Page CMS</button>
+        <button class="tab-btn" onclick="switchAdminTab('projects')">Projects CMS</button>
+        <button class="tab-btn" onclick="switchAdminTab('settings')">Settings</button>
+        <button onclick="adminLogout()" class="ml-auto flex items-center gap-1.5 text-xs text-slate-500 hover:text-red-400 transition-colors font-mono">
+          <i data-lucide="log-out" style="width:12px;height:12px;"></i> Logout
+        </button>
+      </div>
+
+      <!-- TAB 1: Page CMS -->
+      <div id="tab-cms" class="tab-panel active p-5 space-y-5">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <!-- Status badge -->
+          <div>
+            <label class="admin-label">Hero Status Badge</label>
+            <input type="text" id="cms-hero-badge" class="admin-input mt-1" placeholder="Available for Projects · Q3 2025"/>
+          </div>
+          <!-- Subheading -->
+          <div>
+            <label class="admin-label">Hero Subheading</label>
+            <input type="text" id="cms-hero-sub" class="admin-input mt-1" placeholder="Full-stack web engineering studio..."/>
+          </div>
+          <!-- Founder name -->
+          <div>
+            <label class="admin-label">Founder Name</label>
+            <input type="text" id="cms-founder-name" class="admin-input mt-1" placeholder="Jarsila Paul"/>
+          </div>
+          <!-- Founder title -->
+          <div>
+            <label class="admin-label">Founder Title</label>
+            <input type="text" id="cms-founder-title" class="admin-input mt-1" placeholder="Lead Engineer & Studio Director"/>
+          </div>
+          <!-- WhatsApp number -->
+          <div>
+            <label class="admin-label">WhatsApp Number (with country code)</label>
+            <input type="text" id="cms-wa-num" class="admin-input mt-1" placeholder="1234567890"/>
+          </div>
+          <!-- Phone label -->
+          <div>
+            <label class="admin-label">Phone Display Text</label>
+            <input type="text" id="cms-phone-label" class="admin-input mt-1" placeholder="Call Studio"/>
+          </div>
+          <!-- Phone href -->
+          <div>
+            <label class="admin-label">Phone Number (tel:)</label>
+            <input type="text" id="cms-phone-num" class="admin-input mt-1" placeholder="+1234567890"/>
+          </div>
+        </div>
+
+        <!-- Skill metrics -->
+        <div class="border-t border-slate-900 pt-4">
+          <div class="font-mono text-xs text-slate-500 uppercase tracking-widest mb-3">Skill Metric Badges</div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="admin-label">Badge 1 Value</label>
+              <input type="text" id="cms-sk1-val" class="admin-input mt-1" placeholder="98%"/>
+              <input type="text" id="cms-sk1-label" class="admin-input mt-1" placeholder="Client Satisfaction"/>
+            </div>
+            <div>
+              <label class="admin-label">Badge 2 Value</label>
+              <input type="text" id="cms-sk2-val" class="admin-input mt-1" placeholder="5yr"/>
+              <input type="text" id="cms-sk2-label" class="admin-input mt-1" placeholder="Experience"/>
+            </div>
+            <div>
+              <label class="admin-label">Badge 3 Value</label>
+              <input type="text" id="cms-sk3-val" class="admin-input mt-1" placeholder="40+"/>
+              <input type="text" id="cms-sk3-label" class="admin-input mt-1" placeholder="Tech Stack Items"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="border-t border-slate-900 pt-4">
+          <div class="font-mono text-xs text-slate-500 uppercase tracking-widest mb-3">Hero Metrics</div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="admin-label">Projects Metric</label>
+              <input type="text" id="cms-met-projects" class="admin-input mt-1" placeholder="30+"/>
+            </div>
+            <div>
+              <label class="admin-label">Clients Metric</label>
+              <input type="text" id="cms-met-clients" class="admin-input mt-1" placeholder="20+"/>
+            </div>
+            <div>
+              <label class="admin-label">Uptime Metric</label>
+              <input type="text" id="cms-met-uptime" class="admin-input mt-1" placeholder="99.9%"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image uploaders -->
+        <div class="border-t border-slate-900 pt-4 space-y-4">
+          <div class="font-mono text-xs text-slate-500 uppercase tracking-widest mb-3">Image Assets</div>
+          <div class="grid sm:grid-cols-3 gap-4">
+            <!-- Logo uploader -->
+            <div>
+              <label class="admin-label mb-2">Corporate Logo</label>
+              <div class="upload-zone" id="zone-logo" ondragover="handleDrag(event,'zone-logo')" ondragleave="handleDragLeave('zone-logo')" ondrop="handleDrop(event,'logo')">
+                <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" onchange="handleFileUpload(event,'logo')"/>
+                <div id="preview-logo" class="hidden mb-2">
+                  <img id="preview-logo-img" src="" alt="" class="w-12 h-12 object-cover rounded-lg mx-auto mb-1"/>
+                </div>
+                <i data-lucide="upload" style="width:20px;height:20px;color:#64748b;" class="mx-auto mb-2"></i>
+                <div class="text-xs text-slate-500 font-mono" id="zone-logo-txt">Click or drag logo</div>
+              </div>
+            </div>
+            <!-- Profile picture -->
+            <div>
+              <label class="admin-label mb-2">Founder Portrait</label>
+              <div class="upload-zone" id="zone-profile" ondragover="handleDrag(event,'zone-profile')" ondragleave="handleDragLeave('zone-profile')" ondrop="handleDrop(event,'profile')">
+                <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" onchange="handleFileUpload(event,'profile')"/>
+                <div id="preview-profile" class="hidden mb-2">
+                  <img id="preview-profile-img" src="" alt="" class="w-12 h-12 object-cover rounded-lg mx-auto mb-1"/>
+                </div>
+                <i data-lucide="user" style="width:20px;height:20px;color:#64748b;" class="mx-auto mb-2"></i>
+                <div class="text-xs text-slate-500 font-mono" id="zone-profile-txt">Click or drag portrait</div>
+              </div>
+            </div>
+            <!-- Hero illustration -->
+            <div>
+              <label class="admin-label mb-2">Hero Badge Illustration</label>
+              <div class="upload-zone" id="zone-hero" ondragover="handleDrag(event,'zone-hero')" ondragleave="handleDragLeave('zone-hero')" ondrop="handleDrop(event,'hero')">
+                <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" onchange="handleFileUpload(event,'hero')"/>
+                <div id="preview-hero" class="hidden mb-2">
+                  <img id="preview-hero-img" src="" alt="" class="w-12 h-12 object-cover rounded-lg mx-auto mb-1"/>
+                </div>
+                <i data-lucide="image" style="width:20px;height:20px;color:#64748b;" class="mx-auto mb-2"></i>
+                <div class="text-xs text-slate-500 font-mono" id="zone-hero-txt">Click or drag illustration</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="saveCmsChanges()" class="btn-primary">Save All Changes</button>
+        <div id="cms-success" class="hidden mt-2 font-mono text-xs text-green-400 py-2 text-center">✓ Changes applied and saved to localStorage.</div>
+      </div>
+
+      <!-- TAB 2: Projects CMS -->
+      <div id="tab-projects" class="tab-panel p-5">
+        <div class="flex items-center justify-between mb-4">
+          <div class="font-display font-semibold text-white">Project Cards</div>
+          <button onclick="openAddProjectModal()" class="btn-primary" style="padding:8px 16px;font-size:12px;">+ Add Project</button>
+        </div>
+        <div id="admin-projects-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- TAB 3: Settings -->
+      <div id="tab-settings" class="tab-panel p-5 space-y-4">
+        <div class="card p-4">
+          <div class="font-display font-semibold text-white mb-1">Data Persistence</div>
+          <p class="text-slate-400 text-xs mb-3">All changes are automatically written to <span class="font-mono text-orange-400">localStorage</span> and persist across browser sessions.</p>
+          <div class="flex items-center gap-2">
+            <span class="badge badge-green"><span class="pulse-dot" style="width:5px;height:5px;"></span>localStorage active</span>
+          </div>
+        </div>
+        <div class="card p-4">
+          <div class="font-display font-semibold text-white mb-1">Restore Defaults</div>
+          <p class="text-slate-400 text-xs mb-3">Reset all content to original values. This will clear all saved customizations.</p>
+          <button onclick="restoreDefaults()" class="px-4 py-2 rounded-lg text-xs font-semibold border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all font-mono">
+            ⚠ Restore System Defaults
+          </button>
+        </div>
+        <div class="card p-4">
+          <div class="font-display font-semibold text-white mb-1">Export Configuration</div>
+          <p class="text-slate-400 text-xs mb-3">Download all CMS settings as a JSON backup file.</p>
+          <button onclick="exportConfig()" class="btn-outline" style="padding:8px 16px;font-size:12px;">Export JSON Backup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Project Sub-Modal -->
+<div id="add-project-modal" class="modal-overlay" onclick="event.target===this&&closeAddProjectModal()" style="z-index:300;">
+  <div class="modal-box" style="max-width:480px;" onclick="event.stopPropagation()">
+    <div class="flex items-center justify-between p-4 border-b border-slate-900">
+      <div class="font-display font-bold text-white text-sm" id="proj-modal-title">Add Project</div>
+      <button onclick="closeAddProjectModal()" class="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-800">
+        <i data-lucide="x" style="width:12px;height:12px;"></i>
+      </button>
+    </div>
+    <div class="p-5 space-y-3">
+      <input type="hidden" id="edit-proj-id"/>
+      <div>
+        <label class="admin-label">Project Title</label>
+        <input type="text" id="proj-title" class="admin-input mt-1" placeholder="My Awesome Project"/>
+      </div>
+      <div>
+        <label class="admin-label">Category</label>
+        <input type="text" id="proj-cat" class="admin-input mt-1" placeholder="Web App / E-commerce / etc."/>
+      </div>
+      <div>
+        <label class="admin-label">Description</label>
+        <textarea id="proj-desc" rows="2" class="admin-input mt-1" placeholder="Brief project description..."></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="admin-label">Status</label>
+          <select id="proj-status" class="admin-input mt-1" style="appearance:none;">
+            <option style="background:#0d1117;">Live</option>
+            <option style="background:#0d1117;">In Progress</option>
+            <option style="background:#0d1117;">Completed</option>
+            <option style="background:#0d1117;">Archived</option>
+          </select>
+        </div>
+        <div>
+          <label class="admin-label">Tech Tags (comma-sep)</label>
+          <input type="text" id="proj-tags" class="admin-input mt-1" placeholder="React, Node, AWS"/>
+        </div>
+      </div>
+      <div>
+        <label class="admin-label">CTA Text</label>
+        <input type="text" id="proj-cta" class="admin-input mt-1" placeholder="View Case Study →"/>
+      </div>
+      <div>
+        <label class="admin-label">CTA Link (optional)</label>
+        <input type="text" id="proj-link" class="admin-input mt-1" placeholder="https://..."/>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button onclick="saveProject()" class="btn-primary flex-1">Save Project</button>
+        <button onclick="closeAddProjectModal()" class="btn-outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating admin button (mobile) -->
+<button onclick="openAdminModal()"
+  class="fixed bottom-6 right-6 z-50 w-12 h-12 flex items-center justify-center rounded-full shadow-lg md:hidden"
+  style="background:linear-gradient(135deg,#f97316,#ea580c);box-shadow:0 0 20px rgba(249,115,22,0.4);">
+  <i data-lucide="lock" style="width:18px;height:18px;color:#000;"></i>
+</button>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT ENGINE
+═══════════════════════════════════════════════ -->
+<script type="module">// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCpNipZXgPctfUfkOtap2BhWKjKfP9T0lo",
+  authDomain: "jardevtech-6b8a5.firebaseapp.com",
+  projectId: "jardevtech-6b8a5",
+  storageBucket: "jardevtech-6b8a5.firebasestorage.app",
+  messagingSenderId: "955738275979",
+  appId: "1:955738275979:web:8d9a73c5060da1dc16548e",
+  measurementId: "G-SX23KJP2E4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);</script>
+<script>
+// ─── DEFAULTS ────────────────────────────────────────────────────────────────
+const DEFAULTS = {
+  heroBadge: 'Available for Projects · Q3 2025',
+  heroSub: 'Full-stack web engineering and software studio. We build scalable, performant digital products that grow your business from the ground up.',
+  heroDesc: 'From rapid MVP launches to enterprise-grade platforms — JardevTech delivers pixel-perfect design fused with engineering discipline. Every line of code ships with purpose.',
+  founderName: 'Jarsila Paul',
+  founderTitle: 'Lead Engineer & Studio Director',
+  waNum: '',
+  phoneLabel: 'Call Studio',
+  phoneNum: '',
+  sk1Val: '98%', sk1Label: 'Client Satisfaction',
+  sk2Val: '5yr', sk2Label: 'Experience',
+  sk3Val: '40+', sk3Label: 'Tech Stack Items',
+  metProjects: '30+', metClients: '20+', metUptime: '99.9%',
+  logoImg: '', profileImg: '', heroBadgeImg: '',
+  projects: [
+    { id: 1, title: 'NexaShop Platform', cat: 'E-Commerce', desc: 'Full-stack e-commerce platform with real-time inventory, AI-driven recommendations, and Stripe integration.', status: 'Live', tags: ['Next.js','PostgreSQL','Stripe'], cta: 'View Case Study →', link: '#' },
+    { id: 2, title: 'FlowMetrics SaaS', cat: 'SaaS Dashboard', desc: 'Analytics SaaS for marketing teams. Custom data visualizations, team workspaces, and webhook integrations.', status: 'Live', tags: ['React','Node.js','Redis'], cta: 'View Case Study →', link: '#' },
+    { id: 3, title: 'LegalAI Assistant', cat: 'AI Application', desc: 'LLM-powered document analysis tool for law firms. Processes contracts and highlights key clauses instantly.', status: 'Completed', tags: ['Python','OpenAI','FastAPI'], cta: 'View Case Study →', link: '#' },
+    { id: 4, title: 'TrailBuddy Mobile', cat: 'Mobile App', desc: 'Cross-platform hiking companion app with offline maps, GPS tracking, and community trail reviews.', status: 'Live', tags: ['React Native','Mapbox'], cta: 'View Case Study →', link: '#' },
+    { id: 5, title: 'HireFlow ATS', cat: 'HR Platform', desc: 'Applicant tracking system with AI resume scoring, automated interview scheduling, and Slack integration.', status: 'In Progress', tags: ['Vue.js','Django','AWS'], cta: 'In Development', link: '#' },
+    { id: 6, title: 'DataPulse Monitor', cat: 'DevOps Tool', desc: 'Real-time infrastructure monitoring dashboard with alerting, log aggregation, and team incident tracking.', status: 'Completed', tags: ['Go','InfluxDB','Grafana'], cta: 'View Case Study →', link: '#' },
+  ]
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let state = {};
+let consultMode = 'tech';
+let projectType = 'website';
+let adminAuthenticated = false;
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function loadState() {
+  const saved = localStorage.getItem('jardevtech_state');
+  state = saved ? { ...DEFAULTS, ...JSON.parse(saved) } : { ...DEFAULTS };
+}
+function saveState() {
+  localStorage.setItem('jardevtech_state', JSON.stringify(state));
+}
+function applyState() {
+  setText('hero-badge-text', state.heroBadge);
+  setText('hero-subheading', state.heroSub);
+  setText('founder-name', state.founderName);
+  setText('founder-title', state.founderTitle);
+  setText('skill-1-val', state.sk1Val);  setText('skill-1-label', state.sk1Label);
+  setText('skill-2-val', state.sk2Val);  setText('skill-2-label', state.sk2Label);
+  setText('skill-3-val', state.sk3Val);  setText('skill-3-label', state.sk3Label);
+  setText('met-projects', state.metProjects);
+  setText('met-clients', state.metClients);
+  setText('met-uptime', state.metUptime);
+
+  // WhatsApp
+  if (state.waNum) {
+    setAttr('wa-link', 'href', 'https://wa.me/' + state.waNum);
+    setAttr('contact-wa', 'href', 'https://wa.me/' + state.waNum);
+  }
+  setText('wa-label', 'WhatsApp');
+  setText('phone-label', state.phoneLabel);
+  if (state.phoneNum) setAttr('phone-link', 'href', 'tel:' + state.phoneNum);
+
+  // Images
+  applyImage('logo', state.logoImg);
+  applyImage('profile', state.profileImg);
+  applyImage('heroBadge', state.heroBadgeImg);
+
+  renderProjects();
+}
+function setText(id, val) { const el = document.getElementById(id); if (el && val) el.textContent = val; }
+function setAttr(id, attr, val) { const el = document.getElementById(id); if (el && val) el.setAttribute(attr, val); }
+function applyImage(type, src) {
+  if (!src) return;
+  if (type === 'logo') {
+    const img = document.getElementById('header-logo-img');
+    const def = document.getElementById('header-logo-svg');
+    if (img) { img.src = src; img.style.display = 'block'; }
+    if (def) def.style.display = 'none';
+  } else if (type === 'profile') {
+    const img = document.getElementById('founder-img');
+    const def = document.getElementById('founder-avatar-default');
+    if (img) { img.src = src; img.style.display = 'block'; }
+    if (def) def.style.display = 'none';
+  } else if (type === 'heroBadge') {
+    const img = document.getElementById('hero-badge-img');
+    const def = document.getElementById('hero-badge-default');
+    if (img) { img.src = src; img.style.display = 'block'; }
+    if (def) def.style.display = 'none';
+  }
+}
+
+// ─── HEADER ──────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const hh = String(now.getUTCHours()).padStart(2,'0');
+  const mm = String(now.getUTCMinutes()).padStart(2,'0');
+  const ss = String(now.getUTCSeconds()).padStart(2,'0');
+  const str = `${hh}:${mm}:${ss}`;
+  setText('utc-clock', str);
+  setText('footer-utc', str);
+}
+function toggleMobileMenu() {
+  const m = document.getElementById('mobile-menu');
+  m.classList.toggle('open');
+}
+window.addEventListener('scroll', () => {
+  const h = document.getElementById('main-header');
+  h.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ─── PROJECTS RENDER ─────────────────────────────────────────────────────────
+const statusColors = { Live:'green', 'In Progress':'orange', Completed:'blue', Archived:'purple' };
+function renderProjects() {
+  const grid = document.getElementById('projects-grid');
+  if (!grid) return;
+  grid.innerHTML = state.projects.map(p => {
+    const sc = statusColors[p.status] || 'blue';
+    const tagHtml = (p.tags||[]).map(t => `<span class="badge badge-${sc}" style="font-size:10px;">${t}</span>`).join('');
+    return `
+    <div class="project-card group">
+      <div class="flex items-start justify-between mb-3">
+        <span class="badge badge-${sc}" style="font-size:10px;">${p.status}</span>
+        <span class="font-mono text-xs text-slate-600">${p.cat}</span>
+      </div>
+      <h3 class="font-display font-bold text-white mb-2 text-base group-hover:text-orange-400 transition-colors">${p.title}</h3>
+      <p class="text-slate-400 text-xs leading-relaxed mb-3">${p.desc}</p>
+      <div class="flex flex-wrap gap-1 mb-4">${tagHtml}</div>
+      <a href="${p.link||'#'}" target="_blank" class="text-orange-400 font-mono text-xs hover:text-orange-300 transition-colors">${p.cta||'View →'}</a>
+    </div>`;
+  }).join('');
+
+  // Also render admin list
+  renderAdminProjectList();
+}
+
+function renderAdminProjectList() {
+  const list = document.getElementById('admin-projects-list');
+  if (!list) return;
+  if (!state.projects.length) {
+    list.innerHTML = '<div class="font-mono text-xs text-slate-600 text-center py-8">No projects yet. Add your first one.</div>';
+    return;
+  }
+  list.innerHTML = state.projects.map(p => {
+    const sc = statusColors[p.status] || 'blue';
+    return `
+    <div class="project-card flex items-center justify-between gap-3">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-display font-semibold text-white text-sm truncate">${p.title}</span>
+          <span class="badge badge-${sc}" style="font-size:10px;">${p.status}</span>
+        </div>
+        <div class="font-mono text-xs text-slate-500 mt-0.5">${p.cat}</div>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <button onclick="editProject(${p.id})" class="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-800 hover:border-blue-500 hover:bg-blue-500/10 transition-all">
+          <i data-lucide="edit-2" style="width:12px;height:12px;color:#60a5fa;"></i>
+        </button>
+        <button onclick="deleteProject(${p.id})" class="w-7 h-7 flex items-center justify-center rounded-lg border border-slate-800 hover:border-red-500 hover:bg-red-500/10 transition-all">
+          <i data-lucide="trash-2" style="width:12px;height:12px;color:#f87171;"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+// ─── ESTIMATE CALCULATOR ──────────────────────────────────────────────────────
+const BASE_PRICES = { website: 600, webapp: 900, mobile: 1200, fullstack: 1500 };
+const PAGE_RATE = { website: 60, webapp: 80, mobile: 90, fullstack: 100 };
+function setProjectType(t) {
+  projectType = t;
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.style.background = 'transparent';
+    b.style.borderColor = '#1e293b';
+    b.style.color = '#64748b';
+  });
+  const active = document.getElementById('type-' + t);
+  if (active) {
+    active.style.background = 'rgba(249,115,22,0.15)';
+    active.style.borderColor = 'rgba(249,115,22,0.4)';
+    active.style.color = '#f97316';
+  }
+  updateEstimate();
+}
+function updateEstimate() {
+  const pages = parseInt(document.getElementById('pages-slider').value);
+  const timeline = parseInt(document.getElementById('timeline-slider').value);
+  document.getElementById('pages-val').textContent = pages;
+  document.getElementById('timeline-val').textContent = timeline;
+
+  // Update slider track fill
+  ['pages-slider','timeline-slider'].forEach(id => {
+    const el = document.getElementById(id);
+    const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+    el.style.setProperty('--val', pct + '%');
+  });
+
+  const base = BASE_PRICES[projectType] || 600;
+  const rate = PAGE_RATE[projectType] || 60;
+  let addons = 0;
+  if (document.getElementById('addon-auth').checked)    addons += 400;
+  if (document.getElementById('addon-api').checked)     addons += 600;
+  if (document.getElementById('addon-cms').checked)     addons += 500;
+  if (document.getElementById('addon-ai').checked)      addons += 800;
+  if (document.getElementById('addon-seo').checked)     addons += 250;
+  if (document.getElementById('addon-hosting').checked) addons += 150;
+
+  const pagesCost = pages * rate;
+  const total = base + pagesCost + addons;
+  const monthly = Math.round(100 + (total * 0.05) + (pages * 5));
+  const speedMult = (1.5 + Math.min(pages / 20, 1.2)).toFixed(1);
+
+  setText('est-base',    '$' + base.toLocaleString());
+  setText('est-perpage', '$' + pagesCost.toLocaleString());
+  setText('est-addons',  '$' + addons.toLocaleString());
+  setText('est-fixed',   total.toLocaleString());
+  setText('est-fixed2',  total.toLocaleString());
+  setText('est-monthly', monthly.toLocaleString());
+  setText('est-speed',   speedMult + '×');
+}
+
+// ─── AI CONSULTANT ────────────────────────────────────────────────────────────
+const modeStyles = {
+  tech:   { bg:'rgba(249,115,22,0.1)', border:'rgba(249,115,22,0.3)', color:'#fb923c' },
+  design: { bg:'rgba(59,130,246,0.1)', border:'rgba(59,130,246,0.3)', color:'#60a5fa' },
+  cost:   { bg:'rgba(34,197,94,0.1)', border:'rgba(34,197,94,0.3)', color:'#4ade80' },
+  scale:  { bg:'rgba(168,85,247,0.1)', border:'rgba(168,85,247,0.3)', color:'#c084fc' },
+};
+const consultResponses = {
+  tech: {
+    default: [
+      'For modern web projects, I recommend a JAMstack architecture: Next.js for SSR/SSG, Vercel for deployment, and Supabase or PlanetScale for the database layer. This gives you sub-100ms TTFB globally.',
+      'React remains the dominant choice for complex SPAs, but Next.js adds server-side rendering, file-based routing, and API routes out of the box. For simpler sites, Astro delivers near-zero JS bundles.',
+      'For backend APIs, choose Node.js with TypeScript if your team is JS-first. FastAPI (Python) is excellent for data-heavy or AI-integrated services. GraphQL shines in multi-consumer API environments.',
+      'Database selection depends on your data shape: PostgreSQL for relational/structured data, MongoDB for flexible documents, Redis for caching and sessions. Most production systems use all three.',
+    ],
+    'tech stack': ['For an e-commerce site, I recommend: Next.js + TypeScript (frontend), Node.js/Express + PostgreSQL (backend), Stripe for payments, Redis for cart sessions, and Vercel for deployment. This stack scales from 100 to 100,000 orders/month without major refactoring.'],
+    'faster': ['Speed optimization priorities: (1) Use a CDN — Cloudflare adds ~40% global speed improvement. (2) Enable image optimization (WebP format, lazy loading). (3) Remove render-blocking scripts. (4) Implement proper HTTP caching headers. (5) Prefetch critical navigation routes. These five steps typically cut load time from 4s to under 1.2s.'],
+  },
+  design: {
+    default: [
+      'Start with a design system before writing any UI code. Define your color tokens, type scale, spacing units, and component variants in Figma. This single investment eliminates inconsistency across 100+ components.',
+      'For conversion-focused landing pages: above-the-fold hero must communicate value in under 5 seconds. Lead with a verb ("Build", "Launch", "Grow") and a specific benefit, not a generic tagline.',
+      'Mobile-first is non-negotiable — over 60% of web traffic is mobile. Design for 375px width, then scale up. Use touch-friendly targets (min 44×44px) and ensure text is readable without zooming.',
+      'White space is not wasted space. Premium products consistently use more padding than you think is right. Double your card padding and breathing room — it signals quality instantly.',
+    ],
+    'ux': ['Great UX follows three rules: (1) Reduce cognitive load — users should never need to think. (2) Give immediate feedback on every action. (3) Make errors impossible or recoverable. Apply these to every screen you design and conversions will follow naturally.'],
+  },
+  cost: {
+    default: [
+      'MVP budget framework: Design (Figma): $500–1,500 | Frontend: $1,500–3,000 | Backend + DB: $1,500–4,000 | DevOps/Hosting setup: $300–800 | QA: $500–1,000. Total MVP range: $4,300–$10,300 for a solid product.',
+      'Monthly running costs after launch: Hosting (Vercel/Railway): $20–80/mo | Database (Supabase/PlanetScale): $25–100/mo | CDN (Cloudflare): $0–20/mo | Monitoring (Sentry): $26/mo. Most startups run under $150/mo until significant scale.',
+      'Phased development reduces financial risk. Ship Phase 1 (core loop, 6 weeks), validate with real users, then invest in Phase 2 only after product-market fit signals. This approach typically saves $8,000–20,000 vs. building everything upfront.',
+    ],
+    'budget': ['Startup MVP budget guide: If you have $5K, build one thing brilliantly. If you have $15K, build an MVP + basic admin. If you have $50K, build MVP + growth engine + analytics. Never spend more than 30% of your runway on the first version — the market will teach you what to build next.'],
+  },
+  scale: {
+    default: [
+      'Scaling architecture follows predictable stages: (1) Single server → (2) Load balancer + 2 app servers → (3) CDN + DB read replicas → (4) Microservices + message queues. Most startups stall at Stage 2 and never need Stage 4. Optimize for your actual scale.',
+      'Database scaling: Add indexes on all foreign keys and frequently-queried columns FIRST. This alone handles 10× traffic increases. Only after indexes are optimized should you consider read replicas or sharding.',
+      'Caching strategy: Cache database queries with Redis (TTL: 60s–5min), serve static assets from CDN (TTL: 1 year), and implement API response caching at the edge. This reduces server load by 70–85% for most apps.',
+    ],
+    'scale': ['To scale from 1K to 100K users: Start with a CDN (Cloudflare). Add Redis caching for hot database queries. Implement horizontal auto-scaling on your app servers. Move file storage to S3. Add a PostgreSQL read replica. In this order, these steps handle 99% of scaling needs without a full rewrite.'],
+  },
+};
+
+function setConsultMode(m) {
+  consultMode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.style.background = 'transparent';
+    b.style.borderColor = '#1e293b';
+    b.style.color = '#475569';
+  });
+  const active = document.getElementById('mode-' + m);
+  const s = modeStyles[m];
+  if (active && s) {
+    active.style.background = s.bg;
+    active.style.borderColor = s.border;
+    active.style.color = s.color;
+  }
+}
+
+function quickPrompt(txt) {
+  document.getElementById('chat-input').value = txt;
+  sendConsultMessage();
+}
+
+let chatMsgId = 0;
+function sendConsultMessage() {
+  const input = document.getElementById('chat-input');
+  const query = input.value.trim();
+  if (!query) return;
+  input.value = '';
+  const output = document.getElementById('chat-output');
+  const s = modeStyles[consultMode] || modeStyles.tech;
+
+  // User message
+  const userDiv = document.createElement('div');
+  userDiv.className = 'font-mono text-xs';
+  userDiv.style.color = '#e2e8f0';
+  userDiv.innerHTML = `<span style="color:${s.color};">you@terminal:~$</span> ${escHtml(query)}`;
+  output.appendChild(userDiv);
+  output.scrollTop = output.scrollHeight;
+
+  // Response
+  const responses = consultResponses[consultMode] || consultResponses.tech;
+  let reply = responses.default[Math.floor(Math.random() * responses.default.length)];
+  const q = query.toLowerCase();
+  for (const [key, arr] of Object.entries(responses)) {
+    if (key !== 'default' && q.includes(key)) { reply = arr[0]; break; }
+  }
+
+  const id = 'ai-msg-' + (++chatMsgId);
+  const aiDiv = document.createElement('div');
+  aiDiv.className = 'font-mono text-xs leading-relaxed';
+  aiDiv.style.color = '#94a3b8';
+  aiDiv.innerHTML = `<span style="color:${s.color};">jardevtech-ai ›</span> <span id="${id}"></span>`;
+  output.appendChild(aiDiv);
+  output.scrollTop = output.scrollHeight;
+
+  typeText(id, reply, output, s.color);
+}
+
+function typeText(id, text, scrollTarget, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let i = 0;
+  el.innerHTML = '<span class="typing-cursor"></span>';
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      el.textContent = text.substring(0, i + 1);
+      i++;
+      if (scrollTarget) scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    } else {
+      clearInterval(interval);
+    }
+  }, 18);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── ADMIN CONSOLE ────────────────────────────────────────────────────────────
+function openAdminModal() {
+  document.getElementById('admin-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (adminAuthenticated) showAdminDashboard();
+  lucide.createIcons();
+}
+function closeAdminModal() {
+  document.getElementById('admin-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleModalBgClick(e) {
+  if (e.target === document.getElementById('admin-modal')) closeAdminModal();
+}
+function attemptAdminLogin() {
+  const u = document.getElementById('admin-user').value.trim();
+  const p = document.getElementById('admin-pass').value.trim();
+  const err = document.getElementById('admin-err');
+  if (u === 'jardevtech' && p === 'jarsilapaul1303') {
+    adminAuthenticated = true;
+    err.classList.add('hidden');
+    showAdminDashboard();
+  } else {
+    err.classList.remove('hidden');
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('admin-user').classList.add('border-red-500');
+    setTimeout(() => document.getElementById('admin-user').classList.remove('border-red-500'), 2000);
+  }
+}
+function showAdminDashboard() {
+  document.getElementById('admin-login').classList.add('hidden');
+  document.getElementById('admin-dashboard').classList.remove('hidden');
+  populateCmsInputs();
+  renderAdminProjectList();
+  lucide.createIcons();
+}
+function adminLogout() {
+  adminAuthenticated = false;
+  document.getElementById('admin-login').classList.remove('hidden');
+  document.getElementById('admin-dashboard').classList.add('hidden');
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
+  document.getElementById('admin-err').classList.add('hidden');
+}
+function switchAdminTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    const tabs = ['cms','projects','settings'];
+    b.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('tab-' + tab);
+  if (target) target.classList.add('active');
+  if (tab === 'projects') { renderAdminProjectList(); lucide.createIcons(); }
+}
+
+function populateCmsInputs() {
+  const fields = {
+    'cms-hero-badge': 'heroBadge', 'cms-hero-sub': 'heroSub',
+    'cms-founder-name': 'founderName', 'cms-founder-title': 'founderTitle',
+    'cms-wa-num': 'waNum', 'cms-phone-label': 'phoneLabel', 'cms-phone-num': 'phoneNum',
+    'cms-sk1-val': 'sk1Val', 'cms-sk1-label': 'sk1Label',
+    'cms-sk2-val': 'sk2Val', 'cms-sk2-label': 'sk2Label',
+    'cms-sk3-val': 'sk3Val', 'cms-sk3-label': 'sk3Label',
+    'cms-met-projects': 'metProjects', 'cms-met-clients': 'metClients', 'cms-met-uptime': 'metUptime',
+  };
+  for (const [inputId, key] of Object.entries(fields)) {
+    const el = document.getElementById(inputId);
+    if (el) el.value = state[key] || '';
+  }
+  // Show image previews if set
+  if (state.logoImg) showImgPreview('logo', state.logoImg);
+  if (state.profileImg) showImgPreview('profile', state.profileImg);
+  if (state.heroBadgeImg) showImgPreview('hero', state.heroBadgeImg);
+}
+
+function saveCmsChanges() {
+  const fields = {
+    'cms-hero-badge': 'heroBadge', 'cms-hero-sub': 'heroSub',
+    'cms-founder-name': 'founderName', 'cms-founder-title': 'founderTitle',
+    'cms-wa-num': 'waNum', 'cms-phone-label': 'phoneLabel', 'cms-phone-num': 'phoneNum',
+    'cms-sk1-val': 'sk1Val', 'cms-sk1-label': 'sk1Label',
+    'cms-sk2-val': 'sk2Val', 'cms-sk2-label': 'sk2Label',
+    'cms-sk3-val': 'sk3Val', 'cms-sk3-label': 'sk3Label',
+    'cms-met-projects': 'metProjects', 'cms-met-clients': 'metClients', 'cms-met-uptime': 'metUptime',
+  };
+  for (const [inputId, key] of Object.entries(fields)) {
+    const el = document.getElementById(inputId);
+    if (el && el.value.trim()) state[key] = el.value.trim();
+  }
+  saveState();
+  applyState();
+  const s = document.getElementById('cms-success');
+  s.classList.remove('hidden');
+  setTimeout(() => s.classList.add('hidden'), 3000);
+}
+
+// ─── IMAGE UPLOADERS ──────────────────────────────────────────────────────────
+function handleFileUpload(event, type) {
+  const file = event.target.files[0];
+  if (!file) return;
+  processImageFile(file, type);
+}
+function handleDrag(event, zoneId) {
+  event.preventDefault();
+  document.getElementById(zoneId).classList.add('drag-over');
+}
+function handleDragLeave(zoneId) {
+  document.getElementById(zoneId).classList.remove('drag-over');
+}
+function handleDrop(event, type) {
+  event.preventDefault();
+  const zoneId = 'zone-' + type;
+  document.getElementById(zoneId).classList.remove('drag-over');
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processImageFile(file, type);
+}
+function processImageFile(file, type) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const b64 = e.target.result;
+    if (type === 'logo') { state.logoImg = b64; showImgPreview('logo', b64); applyImage('logo', b64); }
+    else if (type === 'profile') { state.profileImg = b64; showImgPreview('profile', b64); applyImage('profile', b64); }
+    else if (type === 'hero') { state.heroBadgeImg = b64; showImgPreview('hero', b64); applyImage('heroBadge', b64); }
+    saveState();
+  };
+  reader.readAsDataURL(file);
+}
+function showImgPreview(type, src) {
+  const preview = document.getElementById('preview-' + type);
+  const img = document.getElementById('preview-' + type + '-img');
+  const txt = document.getElementById('zone-' + type + '-txt');
+  if (preview) preview.classList.remove('hidden');
+  if (img) img.src = src;
+  if (txt) txt.textContent = '✓ Image loaded';
+}
+
+// ─── PROJECTS CRUD ────────────────────────────────────────────────────────────
+let editingProjectId = null;
+function openAddProjectModal() {
+  editingProjectId = null;
+  clearProjectForm();
+  setText('proj-modal-title', 'Add Project');
+  document.getElementById('add-project-modal').classList.add('open');
+}
+function closeAddProjectModal() {
+  document.getElementById('add-project-modal').classList.remove('open');
+}
+function clearProjectForm() {
+  ['proj-title','proj-cat','proj-desc','proj-tags','proj-cta','proj-link'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const s = document.getElementById('proj-status');
+  if (s) s.value = 'Live';
+}
+function editProject(id) {
+  const p = state.projects.find(x => x.id === id);
+  if (!p) return;
+  editingProjectId = id;
+  setText('proj-modal-title', 'Edit Project');
+  document.getElementById('proj-title').value = p.title || '';
+  document.getElementById('proj-cat').value = p.cat || '';
+  document.getElementById('proj-desc').value = p.desc || '';
+  document.getElementById('proj-status').value = p.status || 'Live';
+  document.getElementById('proj-tags').value = (p.tags||[]).join(', ');
+  document.getElementById('proj-cta').value = p.cta || '';
+  document.getElementById('proj-link').value = p.link || '';
+  document.getElementById('add-project-modal').classList.add('open');
+}
+function saveProject() {
+  const title = document.getElementById('proj-title').value.trim();
+  if (!title) { alert('Title is required'); return; }
+  const proj = {
+    id: editingProjectId || Date.now(),
+    title,
+    cat: document.getElementById('proj-cat').value.trim() || 'Web Project',
+    desc: document.getElementById('proj-desc').value.trim() || 'Project description.',
+    status: document.getElementById('proj-status').value,
+    tags: document.getElementById('proj-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    cta: document.getElementById('proj-cta').value.trim() || 'View Case Study →',
+    link: document.getElementById('proj-link').value.trim() || '#',
+  };
+  if (editingProjectId) {
+    state.projects = state.projects.map(p => p.id === editingProjectId ? proj : p);
+  } else {
+    state.projects = [...state.projects, proj];
+  }
+  saveState();
+  renderProjects();
+  lucide.createIcons();
+  closeAddProjectModal();
+}
+function deleteProject(id) {
+  if (!confirm('Delete this project card?')) return;
+  state.projects = state.projects.filter(p => p.id !== id);
+  saveState();
+  renderProjects();
+  lucide.createIcons();
+}
+
+// ─── SETTINGS ─────────────────────────────────────────────────────────────────
+function restoreDefaults() {
+  if (!confirm('Restore all content to original defaults? This will clear all saved customizations.')) return;
+  localStorage.removeItem('jardevtech_state');
+  state = { ...DEFAULTS, projects: JSON.parse(JSON.stringify(DEFAULTS.projects)) };
+  saveState();
+  applyState();
+  populateCmsInputs();
+  alert('System defaults restored.');
+}
+function exportConfig() {
+  const json = JSON.stringify(state, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'jardevtech-config.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+// ─── CONTACT ──────────────────────────────────────────────────────────────────
+function handleContactSubmit() {
+  const s = document.getElementById('contact-success');
+  s.classList.remove('hidden');
+  setTimeout(() => s.classList.add('hidden'), 4000);
+}
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  applyState();
+  updateEstimate();
+  setConsultMode('tech');
+  setInterval(updateClock, 1000);
+  updateClock();
+  lucide.createIcons();
+  // Init slider tracks
+  ['pages-slider','timeline-slider'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+      el.style.setProperty('--val', pct + '%');
+    }
+  });
+});
+</script>
+</body>
+</html>
